@@ -10,13 +10,12 @@
 # README.md file.
 
 set -o errexit
-set -o nounset
 
 if [[ ! -z "$1" ]]; then
     if [[ -d "$1" ]]; then
-        DIR_NAME="$1"
-        readonly FLAC_DIR="$(pwd)/$DIR_NAME"
-        DIR_NAME=$(basename "$DIR_NAME")
+        SRC_DIR="$1"
+        readonly SRC_DIR=$(readlink -f "$SRC_DIR")
+        readonly SRC_DIR_NAME=$(basename "$SRC_DIR")
     else
         echo "$1 is not a proper directory"
         exit 1
@@ -25,6 +24,8 @@ else
     echo "No input directory was provided."
     exit 1
 fi
+
+set -o nounset
 
 declare -A OPTIONS
 OPTIONS['CD - FLAC']=""
@@ -38,10 +39,10 @@ for K in "${!OPTIONS[@]}"; do
         continue
     fi
 
-    NEW_DIR="$FLAC_DIR/../$DIR_NAME ($K)" 
+    NEW_DIR="$SRC_DIR/../$SRC_DIR_NAME ($K)" 
     mkdir "$NEW_DIR"
 
-    for f in "$FLAC_DIR"/*; do
+    for f in "$SRC_DIR"/*; do
         if [[ -d "$f" ]]; then
             continue
         elif [[ -f "$f" ]]; then
@@ -63,4 +64,4 @@ for K in "${!OPTIONS[@]}"; do
     done
 done
 
-mv "$FLAC_DIR" "FLAC_DIR ($FLAC_DIR_EXT)"
+mv "$SRC_DIR" "$SRC_DIR ($FLAC_DIR_EXT)"
