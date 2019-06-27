@@ -45,8 +45,7 @@ readonly DST_FILE="${SRC_FILE%.*}.cbz"
 readonly DST_FILE_NAME=$(basename "$DST_FILE")
 
 readonly TEMP_DIR="$SRC_FILE_DIR/tempdir"
-readonly TEMP_FILE="$SRC_FILE_DIR/tempfile.zip"
-readonly UPLOADS_FILE="$SRC_FILE_DIR/ups"
+readonly UPLOADS_FILE="$SRC_FILE_DIR/uplinks"
 
 trap 'cleanup; exit 1' INT TERM EXIT
 
