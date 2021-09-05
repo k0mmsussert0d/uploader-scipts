@@ -26,8 +26,8 @@ def main(args):
 
     dst = Path(args.output)
     dst.mkdir(parents=True, exist_ok=True)
-    for idx, file in enumerate(files):
-        p = dst / f'{args.name} - S{args.season:02d}E{(idx+1):02d}{file.suffix}'
+    for idx, file in enumerate(files, start=args.start_num):
+        p = dst / f'{args.name} - S{args.season:02d}E{idx:02d}{file.suffix}'
         logging.info(f'Linking {file} to {p}')
         try:
             p.symlink_to(file, False)
@@ -45,6 +45,8 @@ if __name__ == '__main__':
                         help='Show name. Used for naming symlinks')
     parser.add_argument('-s', '--season', metavar='season_number', type=int, required=False, default=1,
                         help='Season number. Used for naming symlinks. Defaults to 1 and results in S01Exx names.')
+    parser.add_argument('-S', '--start-num', metavar='start_number', type=int, required=False, default=1,
+                        help='First episode number. Used for naming symlinks. Default to 1 and results in SxxE01 names')
     parser.add_argument('--skip', metavar='skip_files', action='store', nargs='*', default=['*.nfo', '*.zip', '*.srt'],
                         help='Mask for files that should be skipped. Supply multiple masks by splitting them with comma'
                              'or providing multiple --skip arguments.')
